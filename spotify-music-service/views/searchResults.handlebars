@@ -1,3 +1,41 @@
 <div class="container my-5">
+  <!-- Navbar logo w/ temp -->
+  <div class="d-flex justify-content-between mb-3">
+    <div>
+      <a href="/">
+        <h1>ToFi</h1>
+      </a>
+    </div>
+    <div class="d-flex">
+      <img src="./images/josh-weather-placeholder.png" alt="temperature" width="100" class="weather-logo">
+      <div>
+        <h1>62</h1>
+        <div>San Francisco, CA</div>
+      </div>
+    </div>
+  </div>
+
   <h1>Search Results</h1>
+
+  <div class="back mb-4" onClick="back()">&#8592; Back to Homepage</div>
+
+  <div class="d-flex flex-wrap">
+    {{#each items}}
+    <div class="px-2">
+      <img width=200 src={{this.album.images.[0].url}} alt="">
+      <h6 class="ellipsis">{{this.name}}</h6>
+      <audio controls>
+        <source src={{this.preview_url}} type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    {{/each}}
+  </div>
 </div>
+
+
+<script>
+  function back() {
+    window.history.back();
+  }
+</script>

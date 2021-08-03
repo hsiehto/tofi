@@ -107,14 +107,12 @@ app.get('/search', function (req, res) {
     },
     json: true
   };
-  console.log('request====', req.body)
 
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
   
       // use the access token to access the Spotify Web API
       const token = body.access_token;
-      console.log('request====', req.body)
 
       const searchOptions = {
         url: `https://api.spotify.com/v1/search?q=${req.query.value}&type=${req.query.type}`,
@@ -125,8 +123,8 @@ app.get('/search', function (req, res) {
       };
 
       request.get(searchOptions, function(error, response, body) {
-        const searchItems = body
-        console.log('search----', searchItems)
+        const searchItems = body.tracks || body.artists || body.albums || body.playlists || body.shows || body.episodes
+
         res.render('searchResults', searchItems)
       });
     }
@@ -191,7 +189,6 @@ app.get('/playlist', function (req, res) {
         json: true
       };
       request.get(categoryOptions, function(error, response, body) {
-        console.log('playlist', body)
         res.render('playlist', body)
       });
     }
