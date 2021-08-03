@@ -1,0 +1,76 @@
+<div class="container my-5">
+  <!-- Navbar logo w/ temp -->
+  <div class="d-flex justify-content-between mb-3">
+    <div>
+      <h1>ToFi</h1>
+    </div>
+    <div class="d-flex">
+      <img src="./images/temp.png" alt="temperature" width="100" class="weather-logo">
+      <div>
+        <h1>62</h1>
+        <div>San Francisco, CA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search by section -->
+  <div class="mt-4">
+    <h2>Search by ...</h2>
+    <form method="get" action="/search" class="d-flex align-items-center">
+      <input type="text" class="form-control search-field" id="searchFormInput" name="value"
+        placeholder="Search by album, artist, or song name">
+      <select id="searchType" class="form-select search-field" name="type" aria-label="searchSelect">
+        <option value="album">Album</option>
+        <option value="artist">Artist</option>
+        <option value="playlist">Playlist</option>
+        <option value="track">Song</option>
+        <option value="show">Show</option>
+        <option value="episode">Episode</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+
+  <!-- Playlists section -->
+  <div class="mt-4">
+    <h2>{{playlists.playlistOwner}} Playlists...</h2>
+    <div class="d-flex flex-wrap">
+      {{#each playlists.items}}
+      <a href="/playlist?playlistId={{this.id}}">
+        <div class="px-2 ellipsis">
+          <img src={{this.image.url}} alt="temperature" height="180" class="mr-2">
+          <h6 class="text-center mt-2">{{this.name}}</h6>
+        </div>
+      </a>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- Browse by section -->
+  <div class="mt-4">
+    <h2>Browse by...</h2>
+      <div class="d-flex flex-wrap">
+        {{#each categories.categories.items}}
+          <a href="/category?categoryId={{this.id}}">
+            <div class="px-2">
+              <img src={{this.icon.url}} alt="temperature" height="180" class="mr-2">
+              <h6 class="text-center mt-2">{{this.name}}</h6>
+            </div>
+          </a>
+        {{/each}}
+      </div>
+  </div>
+</div>
+
+<script>
+  function search() {
+    const value = document.getElementById('searchFormInput').value;
+    const type = document.getElementById('searchType').value;
+
+    const req = new XMLHttpRequest();
+
+    req.open('GET', '/search' + '?value=' + value + '&type=' + type);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(null)
+  }
+</script>
