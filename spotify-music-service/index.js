@@ -1,38 +1,21 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * For more information, read
- * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
- */
 require('dotenv').config();
 
-const express = require('express'); // Express web server framework
-const request = require('request'); // "Request" library
+const express = require('express');
+const request = require('request');
 const cors = require('cors');
-const bodyParser = require('body-parser'); // body-parser parses the body of POST requests
+const bodyParser = require('body-parser');
 
-const client_id = process.env.CLIENT_ID; // Your client id
-const client_secret = process.env.CLIENT_SECRET; // Your secret
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
 
 const app = express();
-
-const handlebars = require('express-handlebars').create({
-  defaultLayout: 'main'
-});
 
 app.use(express.static(__dirname + '/public'))
   .use(cors());
 
-// SETTING THE TEMPLATING ENGINE
-app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
-
-// SETTING UP BODY-PARSER
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: false
+  extended: false
 }));
 
 app.get('/', function (req, res) {
@@ -46,11 +29,9 @@ app.get('/', function (req, res) {
     },
     json: true
   };
-  
-  request.post(authOptions, function(error, response, body) {
+
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-  
-      // use the access token to access the Spotify Web API
       const token = body.access_token;
       let items = {}
 
@@ -62,7 +43,7 @@ app.get('/', function (req, res) {
         json: true
       };
 
-      request.get(categoriesOptions, function(error, response, body) {
+      request.get(categoriesOptions, function (error, response, body) {
         const categoryItems = body.categories.items;
 
         for (let item of categoryItems) {
@@ -78,18 +59,18 @@ app.get('/', function (req, res) {
           },
           json: true
         };
-  
-        request.get(playlistOptions, function(error, response, body) {
+
+        request.get(playlistOptions, function (error, response, body) {
           const playlistItems = body.items;
-  
+
           for (let item of playlistItems) {
             item.image = item.images[0]
           }
-  
+
           items.playlists = body
           items.playlists.playlistOwner = playlistItems[0].owner.display_name
 
-          res.render('home', items);
+          res.send(items);
         });
       });
     }
@@ -108,10 +89,8 @@ app.get('/search', function (req, res) {
     json: true
   };
 
-  request.post(authOptions, function(error, response, body) {
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-  
-      // use the access token to access the Spotify Web API
       const token = body.access_token;
 
       const searchOptions = {
@@ -122,10 +101,10 @@ app.get('/search', function (req, res) {
         json: true
       };
 
-      request.get(searchOptions, function(error, response, body) {
+      request.get(searchOptions, function (error, response, body) {
         const searchItems = body.tracks || body.artists || body.albums || body.playlists || body.shows || body.episodes
 
-        res.render('searchResults', searchItems)
+        res.send(searchItems)
       });
     }
   });
@@ -142,11 +121,9 @@ app.get('/category', function (req, res) {
     },
     json: true
   };
-  
-  request.post(authOptions, function(error, response, body) {
+
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-  
-      // use the access token to access the Spotify Web API
       const token = body.access_token;
 
       const categoryOptions = {
@@ -156,8 +133,8 @@ app.get('/category', function (req, res) {
         },
         json: true
       };
-      request.get(categoryOptions, function(error, response, body) {
-        res.render('category', body)
+      request.get(categoryOptions, function (error, response, body) {
+        res.send(body)
       });
     }
   });
@@ -174,11 +151,9 @@ app.get('/playlist', function (req, res) {
     },
     json: true
   };
-  
-  request.post(authOptions, function(error, response, body) {
+
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-  
-      // use the access token to access the Spotify Web API
       const token = body.access_token;
 
       const categoryOptions = {
@@ -188,8 +163,8 @@ app.get('/playlist', function (req, res) {
         },
         json: true
       };
-      request.get(categoryOptions, function(error, response, body) {
-        res.render('playlist', body)
+      request.get(categoryOptions, function (error, response, body) {
+        res.send(body)
       });
     }
   });
