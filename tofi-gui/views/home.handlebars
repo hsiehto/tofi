@@ -1,21 +1,30 @@
 <div class="container my-5">
   <!-- Navbar logo w/ temp -->
   <div class="d-flex justify-content-between mb-3">
-    <div>
+    <div class="d-flex align-items-center">
       <h1>ToFi</h1>
     </div>
     <div class="d-flex">
-      <img src="./images/josh-weather-placeholder.png" alt="temperature" width="100" class="weather-logo">
-      <div>
-        <h1>62</h1>
-        <div>San Francisco, CA</div>
+      <div class="d-flex align-items-center px-4 py-2 weather-condition">
+        {{weather.conditions}}
+      </div>
+      <div class="px-4 py-2 weather-condition">
+        <h1>{{weather.temperature}}</h1>
+        <div>{{weather.where}}</div>
       </div>
     </div>
   </div>
 
   <!-- Search by section -->
-  <div class="mt-4">
-    <h2>Search by ...</h2>
+  <div class="mt-5">
+    <h2>Search by...</h2>
+    <div>
+      To search by a certain keyword, please type song, artist name into the box and select what you're searching for
+      and press the search button.
+    </div>
+    <div class="mb-3 text-danger">
+      Selecting from the dropdown is required to search by artist, song, album, podcast, etc.
+    </div>
     <form method="get" action="/search" class="d-flex align-items-center">
       <input type="text" class="form-control search-field" id="searchFormInput" name="value"
         placeholder="Search by album, artist, or song name">
@@ -32,8 +41,11 @@
   </div>
 
   <!-- Playlists section -->
-  <div class="mt-4">
+  <div class="mt-5">
     <h2>{{playlists.playlistOwner}} Playlists...</h2>
+    <div class="mb-2">Click on a one of the playlist to display music.</div>
+    <h4 class="text-warning mb-3">❗️🎸❗️Don't forget to listen to your favorite music. Music is an important
+      part of our daily lives.❗️🎸❗️</h4>
     <div class="d-flex flex-wrap">
       {{#each playlists.items}}
       <a href="/playlist?playlistId={{this.id}}">
@@ -47,8 +59,9 @@
   </div>
 
   <!-- Browse by section -->
-  <div class="mt-4">
+  <div class="mt-5">
     <h2>Browse by...</h2>
+    <div class="mb-3">Click on one of the categories to display the category information.</div>
     <div class="d-flex flex-wrap">
       {{#each categories.categories.items}}
       <a href="/category?categoryId={{this.id}}">

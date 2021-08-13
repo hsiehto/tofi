@@ -26,8 +26,18 @@ app.get('/', function (req, res) {
     json: true
   };
 
+
+  let items;
+  const zipCode = req.query.zipCode || '94582';
   request.get(options, function (error, response, body) {
-    res.render('home', body);
+    items = body
+    request.get({
+      url: 'https://f4d4dbf4b7df.ngrok.io/weatherget/' + zipCode,
+      json: true
+    }, function (error, response, body) {
+      items.weather = body
+      res.render('home', items)
+    })
   });
 });
 
@@ -37,8 +47,17 @@ app.get('/search', function (req, res) {
     json: true
   };
 
+  let items;
+  const zipCode = req.query.zipCode || '94582';
   request.get(options, function (error, response, body) {
-    res.render('searchResults', body);
+    items = body
+    request.get({
+      url: 'https://f4d4dbf4b7df.ngrok.io/weatherget/' + zipCode,
+      json: true
+    }, function (error, response, body) {
+      items.weather = body
+      res.render('searchResults', body);
+    })
   });
 });
 
@@ -48,8 +67,17 @@ app.get('/category', function (req, res) {
     json: true
   };
 
+  let items;
+  const zipCode = req.query.zipCode || '94582';
   request.get(options, function (error, response, body) {
-    res.render('category', body);
+    items = body
+    request.get({
+      url: 'https://f4d4dbf4b7df.ngrok.io/weatherget/' + zipCode,
+      json: true
+    }, function (error, response, body) {
+      items.weather = body
+      res.render('category', items);
+    })
   });
 });
 
@@ -59,8 +87,17 @@ app.get('/playlist', function (req, res) {
     json: true
   };
 
+  let items;
+  const zipCode = req.query.zipCode || '94582';
   request.get(options, function (error, response, body) {
-    res.render('playlist', body);
+    items = body
+    request.get({
+      url: 'https://f4d4dbf4b7df.ngrok.io/weatherget/' + zipCode,
+      json: true
+    }, function (error, response, body) {
+      items.weather = body
+      res.render('playlist', items);
+    })
   });
 });
 
