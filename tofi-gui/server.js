@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('request');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -20,7 +21,13 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+app.use(cookieParser());
+
 app.get('/', function (req, res) {
+  res.render('home')
+})
+
+app.get('/tofi-home', function (req, res) {
   const options = {
     url: 'http://flip1.engr.oregonstate.edu:8000',
     json: true
@@ -36,7 +43,9 @@ app.get('/', function (req, res) {
       json: true
     }, function (error, response, body) {
       items.weather = body
-      res.render('home', items)
+      res.cookie('zipCode', zipCode)
+
+      res.render('tofi-home', items)
     })
   });
 });
@@ -48,7 +57,7 @@ app.get('/search', function (req, res) {
   };
 
   let items;
-  const zipCode = req.query.zipCode || '94582';
+  const zipCode = req.cookies.zipCode || '94582';
   request.get(options, function (error, response, body) {
     items = body
     request.get({
@@ -56,7 +65,8 @@ app.get('/search', function (req, res) {
       json: true
     }, function (error, response, body) {
       items.weather = body
-      res.render('searchResults', body);
+
+      res.render('searchResults', items);
     })
   });
 });
@@ -68,7 +78,7 @@ app.get('/category', function (req, res) {
   };
 
   let items;
-  const zipCode = req.query.zipCode || '94582';
+  const zipCode = req.cookies.zipCode || '94582';
   request.get(options, function (error, response, body) {
     items = body
     request.get({
@@ -88,7 +98,7 @@ app.get('/playlist', function (req, res) {
   };
 
   let items;
-  const zipCode = req.query.zipCode || '94582';
+  const zipCode = req.cookies.zipCode || '94582';
   request.get(options, function (error, response, body) {
     items = body
     request.get({
